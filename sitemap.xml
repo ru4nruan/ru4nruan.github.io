@@ -2,20 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/category/index.html</loc>
-    
-    <lastmod>2019-12-23T06:34:38.213Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/tag/index.html</loc>
-    
-    <lastmod>2019-12-23T06:34:21.363Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/about/index.html</loc>
     
     <lastmod>2019-12-23T05:55:00.781Z</lastmod>
