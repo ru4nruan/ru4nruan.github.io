@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="你是这白开水一样淡的日子里偷偷加的一颗糖~~">
+  
+
+  
+  
+  
+  
+  
+  
+  <title>WPScan使用方法 | ruanruan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="0x00 什么是Wpscan该扫描器可以实现获取Wordpress站点用户名，获取安装的所有插件、主题，以及存在漏洞的插件、主题，并提供漏洞信息。同时还可以实现对未加防护的Wordpress站点暴力破解用户名密码。">
+<meta name="keywords" content="漏洞分析复现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WPScan使用方法">
+<meta property="og:url" content="http://yoursite.com/2019/12/23/WPScan使用方法/index.html">
+<meta property="og:site_name" content="ruanruan">
+<meta property="og:description" content="0x00 什么是Wpscan该扫描器可以实现获取Wordpress站点用户名，获取安装的所有插件、主题，以及存在漏洞的插件、主题，并提供漏洞信息。同时还可以实现对未加防护的Wordpress站点暴力破解用户名密码。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191216160135504.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191216164808766.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191216163206535.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191216164302342.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191216164433922.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191216163349484.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191216163432583.png">
+<meta property="og:updated_time" content="2019-12-23T08:18:53.314Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="WPScan使用方法">
+<meta name="twitter:description" content="0x00 什么是Wpscan该扫描器可以实现获取Wordpress站点用户名，获取安装的所有插件、主题，以及存在漏洞的插件、主题，并提供漏洞信息。同时还可以实现对未加防护的Wordpress站点暴力破解用户名密码。">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20191216160135504.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src="//push.zhanzhang.baidu.com/push.js"></script>
+<link rel="alternate" href="/atom.xml" title="ruanruan" type="application/atom+xml">
+</head></html>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="ruanruan" rel="home">ruanruan</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/about">About</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/categories">Categories</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/tags">Tags</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-WPScan使用方法" class="post-WPScan使用方法 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title article-title">
+      WPScan使用方法
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2019/12/23/WPScan使用方法/" data-id="ck4i678e300006gvsyv58wg80" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h3 id="0x00-什么是Wpscan"><a href="#0x00-什么是Wpscan" class="headerlink" title="0x00 什么是Wpscan"></a>0x00 什么是Wpscan</h3><p>该扫描器可以实现获取<code>Wordpress</code>站点用户名，获取安装的所有插件、主题，以及存在漏洞的插件、主题，并提供漏洞信息。同时还可以实现对未加防护的<code>Wordpress</code>站点暴力破解用户名密码。<br><a id="more"></a><br><img src="https://img-blog.csdnimg.cn/20191216160135504.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="0x01-使用参数"><a href="#0x01-使用参数" class="headerlink" title="0x01 使用参数"></a>0x01 使用参数</h3><p>Kali自带，使用命令：<code>wpscan --update</code>可更新漏洞库<br><img src="https://img-blog.csdnimg.cn/20191216164808766.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>常用参数选项：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">--update  更新到最新版本</span><br><span class="line">--url   | -u &lt;target url&gt;  要扫描的`WordPress`站点.</span><br><span class="line">--force | -f   不检查网站运行的是不是`WordPress`</span><br><span class="line">--enumerate | -e [option(s)]  枚举</span><br></pre></td></tr></table></figure>
+<h3 id="0x02-工具利用"><a href="#0x02-工具利用" class="headerlink" title="0x02 工具利用"></a>0x02 工具利用</h3><p><strong>1、扫描WordPress漏洞</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://www.xxxxx.top/</span><br></pre></td></tr></table></figure>
+<p><strong>2、扫描wordpress用户</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://www.xxxxx.top/ --enumerate u</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20191216163206535.png" alt="在这里插入图片描述"><br><strong>3、扫描主题</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://www.xxxxx.top/ --enumerate t</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20191216164302342.png" alt="在这里插入图片描述"><br>扫描主题中的漏洞</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://www.xxxxx.top/ --enumerate vt</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20191216164433922.png" alt="在这里插入图片描述"></p>
+<p><strong>4、扫描插件漏洞</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://www.xxxxx.top/ --enumerate p</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20191216163349484.png" alt="在这里插入图片描述"><br>扫描插件中的漏洞</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://www.xxxxx.top/ --enumerate vp</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20191216163432583.png" alt="在这里插入图片描述"><br><strong>5、使用WPScan进行暴力破解</strong><br>在进行暴力破解攻击之前，我们需要创建对应的字典文件。输入下列命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url https://www.xxxxx.top/ -e u --wordlist /root/桌面/password.txt</span><br></pre></td></tr></table></figure>
+<h3 id="0x03-参考"><a href="#0x03-参考" class="headerlink" title="0x03 参考"></a>0x03 参考</h3><p><a href="https://www.freebuf.com/sectool/174663.html" target="_blank" rel="noopener">https://www.freebuf.com/sectool/174663.html</a></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2019/12/23/WPScan使用方法/">
+    <time datetime="2019-12-23T08:16:43.000Z" class="entry-date">
+        2019-12-23
+    </time>
+</a>
+    
+  <span class="article-delim">&#8226;</span>
+  <div class="article-category">
+  <a class="article-category-link" href="/categories/漏洞分析复现/">漏洞分析复现</a>
+  </div>
+
+    
+  <span class="article-delim">&#8226;</span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/漏洞分析复现/">漏洞分析复现</a></li></ul>
+
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+    
+        <span class="nav-next"><a href="/2019/12/23/ThinkCMF框架任意内容包含漏洞分析复现/" rel="next">ThinkCMF框架任意内容包含漏洞分析复现 <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+
+<!-- 目录内容 -->
+             
+        <!-- 目录内容结束 -->
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">About</h3>
+    <div class="widget">
+      qq：2268713202
+    </div>
+  </div>
+
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-content">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/漏洞分析复现/">漏洞分析复现</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/WPScan使用方法/">WPScan使用方法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/ThinkCMF框架任意内容包含漏洞分析复现/">ThinkCMF框架任意内容包含漏洞分析复现</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/fiyocms2-0-6-1版本漏洞复现及分析/">fiyocms2.0.6.1版本漏洞复现及分析</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget-content">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">3</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-content">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/漏洞分析复现/">漏洞分析复现</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-content tagcloud">
+      <a href="/tags/漏洞分析复现/" style="font-size: 10px;">漏洞分析复现</a>
+    </div>
+  </aside>
+
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2019 ruanruan
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+</body>
+</html>
