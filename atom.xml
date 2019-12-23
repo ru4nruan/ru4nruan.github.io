@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>ruanruan</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2019-12-23T08:04:42.191Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>ruanruan</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ThinkCMF框架任意内容包含漏洞分析复现</title>
+    <link href="http://yoursite.com/2019/12/23/ThinkCMF%E6%A1%86%E6%9E%B6%E4%BB%BB%E6%84%8F%E5%86%85%E5%AE%B9%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%A4%8D%E7%8E%B0/"/>
+    <id>http://yoursite.com/2019/12/23/ThinkCMF%E6%A1%86%E6%9E%B6%E4%BB%BB%E6%84%8F%E5%86%85%E5%AE%B9%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%A4%8D%E7%8E%B0/</id>
+    <published>2019-12-23T02:18:19.000Z</published>
+    <updated>2019-12-23T08:04:42.191Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="0x00-CMS简介"><a href="#0x00-CMS简介" class="headerlink" title="0x00 CMS简介"></a>0x00 CMS简介</h3><p>ThinkCMF是一款基于PHP+MYSQL开发的中文内容管理框架，底层采用ThinkPHP3.2.3构建。<br>ThinkCMF提出灵活的应用机制，框架自身提供基础的管理功能，而开发者可以根据自身的需求以应用的形式进行扩展。<br>每个应用都能独立的完成自己的任务，也可通过系统调用其他应用进行协同工作。在这种运行机制下，开发商场应用的用户无需关心开发SNS应用时如何工作的，但他们之间又可通过系统本身进行协调，大大的降低了开发成本和沟通成本。<br><a id="more"></a></p><h3 id="0x01-漏洞简介"><a href="#0x01-漏洞简介" class="headerlink" title="0x01 漏洞简介"></a>0x01 漏洞简介</h3><ul><li>攻击者可利用此漏洞构造恶意的url，向服务器写入任意内容的文件，达到远程代码执行的目的。</li><li>影响范围：</li></ul><p>ThinkCMF X1.6.0<br>ThinkCMF X2.1.0<br>ThinkCMF X2.2.0<br>ThinkCMF X2.2.1<br>ThinkCMF X2.2.2<br>ThinkCMF X2.2.3</p><h3 id="0x02-环境搭建"><a href="#0x02-环境搭建" class="headerlink" title="0x02 环境搭建"></a>0x02 环境搭建</h3><p>直接phpstudy一把梭<br><img src="https://img-blog.csdnimg.cn/20191102122013735.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p><h3 id="0x03-漏洞利用"><a href="#0x03-漏洞利用" class="headerlink" title="0x03 漏洞利用"></a>0x03 漏洞利用</h3><p><strong>1.通过构造<code>a</code>参数的<code>display()</code>方法，实现任意内容包含漏洞</strong><br>payload:</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?a=display&amp;templateFile=README.md</span><br></pre></td></tr></table></figure><p><img src="https://img-blog.csdnimg.cn/20191102124159603.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p><p><strong>2.通过构造<code>a</code>参数的<code>fetch()</code>方法，实现任意文件写入</strong><br>payload:</p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?a=fetch&amp;templateFile=public/index&amp;prefix=''&amp;content=&lt;php&gt;file_put_contents('test.php','&lt;?php phpinfo(); ?&gt;')&lt;/php&gt;</span><br></pre></td></tr></table></figure><p><img src="https://img-blog.csdnimg.cn/20191102123307540.png" alt="在这里插入图片描述"><br>回车执行<br>可以看到根目录下新建的test.php<br><img src="https://img-blog.csdnimg.cn/20191102123121710.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>打开test.php<br>成功写入一句话<br><img src="https://img-blog.csdnimg.cn/20191102123530901.png" alt="在这里插入图片描述"></p><h3 id="0x04-代码分析"><a href="#0x04-代码分析" class="headerlink" title="0x04 代码分析"></a>0x04 代码分析</h3><p>首先看下入口文件<br><img src="https://img-blog.csdnimg.cn/20191109165829820.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p><p>根据poc盲猜控制器<code>IndexController.class.php</code></p><p>可以知道继承了<code>HomebaseController</code>，通过<code>g\m\a</code>参数指定<code>分组\模块\方法</code>，这里可以通过a参数直接调用<code>Portal\IndexController</code>父类(HomebaseController)中的一些权限为<code>public</code>的方法。<br><img src="https://img-blog.csdnimg.cn/20191109171527296.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看的的public方法里就有<code>display()</code>、<code>fetch(),</code>还有方法作用及参数含义。<br>display函数的作用是加载模板和页面输出，所对应的参数为：templateFile为模板文件地址，charset模板字符集，contentType输出类型，content输出内容。<br><img src="https://img-blog.csdnimg.cn/20191109171829488.png" alt="在这里插入图片描述"><br><code>templateFile</code>参数会经过<code>parseTemplate()</code>方法处理。<br>在<code>\application\Common\Controller\AdminbaseController.class.php</code>的<code>parseTemplate()</code>方法如下<br><img src="https://img-blog.csdnimg.cn/20191109172052316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><code>parseTemplate()</code>方法作用：判断模板主题是否存在，当模板主题不存在时会在当前目录下开始查找，形成文件包含。<br><img src="https://img-blog.csdnimg.cn/20191109172548217.png" alt="在这里插入图片描述"><br>fetch函数的作用是获取输出页面内容，调用内置模板引擎。<br>先判断content是否为空，不为空则<code>templateFile</code>参数会经过<code>parseTemplate()</code>方法处理</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thinkphp的模版引擎使用的是smarty，在smarty中当key和value可控时便可以形成模板注入。</span><br></pre></td></tr></table></figure><p>所以当<code>templateFile</code>和<code>prefix</code>参数为空，在<code>content</code>参数传入php代码，便可以形成模板注入。</p><h3 id="0x05-漏洞修复"><a href="#0x05-漏洞修复" class="headerlink" title="0x05 漏洞修复"></a>0x05 漏洞修复</h3><p>将<code>HomebaseController.class.php</code>和<code>AdminbaseController.class.php</code>类中<code>display</code>和<code>fetch</code>函数的修饰符改为<code>protected</code>。</p><h3 id="0x06-参考文章"><a href="#0x06-参考文章" class="headerlink" title="0x06 参考文章"></a>0x06 参考文章</h3><p><a href="https://xz.aliyun.com/t/6626#toc-5" target="_blank" rel="noopener">https://xz.aliyun.com/t/6626#toc-5</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;0x00-CMS简介&quot;&gt;&lt;a href=&quot;#0x00-CMS简介&quot; class=&quot;headerlink&quot; title=&quot;0x00 CMS简介&quot;&gt;&lt;/a&gt;0x00 CMS简介&lt;/h3&gt;&lt;p&gt;ThinkCMF是一款基于PHP+MYSQL开发的中文内容管理框架，底层采用ThinkPHP3.2.3构建。&lt;br&gt;ThinkCMF提出灵活的应用机制，框架自身提供基础的管理功能，而开发者可以根据自身的需求以应用的形式进行扩展。&lt;br&gt;每个应用都能独立的完成自己的任务，也可通过系统调用其他应用进行协同工作。在这种运行机制下，开发商场应用的用户无需关心开发SNS应用时如何工作的，但他们之间又可通过系统本身进行协调，大大的降低了开发成本和沟通成本。&lt;br&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞分析复现" scheme="http://yoursite.com/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="漏洞分析复现" scheme="http://yoursite.com/tags/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%A4%8D%E7%8E%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>fiyocms2.0.6.1版本漏洞复现及分析</title>
+    <link href="http://yoursite.com/2019/12/23/fiyocms2-0-6-1%E7%89%88%E6%9C%AC%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%88%86%E6%9E%90/"/>
+    <id>http://yoursite.com/2019/12/23/fiyocms2-0-6-1%E7%89%88%E6%9C%AC%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%88%86%E6%9E%90/</id>
+    <published>2019-12-23T02:07:50.000Z</published>
+    <updated>2019-12-23T08:04:39.724Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>以下为fiyocms2.0.6.1版本的一些漏洞复现过程及代码分析。</p><a id="more"></a><h3 id="0x01-任意文件上传"><a href="#0x01-任意文件上传" class="headerlink" title="0x01 任意文件上传"></a>0x01 任意文件上传</h3><h4 id="1-漏洞复现"><a href="#1-漏洞复现" class="headerlink" title="1.漏洞复现"></a>1.漏洞复现</h4><p>漏洞位置：Dashboard》Themes》default》Files<br><img src="https://img-blog.csdnimg.cn/20190930181527589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>点击Simpan时抓包，将src参数和content参数修改为新建文件名和其内容<br><img src="https://img-blog.csdnimg.cn/20190930181244659.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>嗯哼~~<br><img src="https://img-blog.csdnimg.cn/20190930182443894.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p><h4 id="2-代码分析"><a href="#2-代码分析" class="headerlink" title="2.代码分析"></a>2.代码分析</h4><p>位置：\fiyocms/dapur/apps/app_theme/libs/save_file.php<br><img src="https://img-blog.csdnimg.cn/20191109181413802.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>从27行代码可以看到利用<code>file_get_contents()</code>函数将<code>c</code>参数的内容保存到<code>f</code>参数的文件上，但是没有对f和c进行任何处理，直接通过POST方法传值，从而造成任意文件上传漏洞。</p><h3 id="0x02-任意文件读取"><a href="#0x02-任意文件读取" class="headerlink" title="0x02 任意文件读取"></a>0x02 任意文件读取</h3><h4 id="1-漏洞复现-1"><a href="#1-漏洞复现-1" class="headerlink" title="1.漏洞复现"></a>1.漏洞复现</h4><p>漏洞位置：admin》Themes》default》Files<br>点击index.php时抓包<br><img src="https://img-blog.csdnimg.cn/20190930183833820.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>修改参数，读取成功<br><img src="https://img-blog.csdnimg.cn/20190930183804869.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p><h4 id="2-代码分析-1"><a href="#2-代码分析-1" class="headerlink" title="2.代码分析"></a>2.代码分析</h4><p>位置：/dapur/apps/app_theme/libs/check_file.php<br><img src="https://img-blog.csdnimg.cn/20191109182627103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>从第13、14行代码可以看出，通过<code>get</code>方法得到文件路径和文件名后进行拼接直接赋值给<code>$file</code>,再赋值给<code>$furl</code>，然后没有经过任何处理直接在23行通过file_get_contents()方法读取<code>$furl</code>，因此存在任意文件读取漏洞。</p><h3 id="0x03-任意文件删除"><a href="#0x03-任意文件删除" class="headerlink" title="0x03 任意文件删除"></a>0x03 任意文件删除</h3><h4 id="1-漏洞复现-2"><a href="#1-漏洞复现-2" class="headerlink" title="1.漏洞复现"></a>1.漏洞复现</h4><p>漏洞位置：admin》Settings》Backup<br>点击Backup时抓包<br><img src="https://img-blog.csdnimg.cn/20190930185012393.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>修改file参数<br><img src="https://img-blog.csdnimg.cn/20190930185322891.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>删除成功~~<br><img src="https://img-blog.csdnimg.cn/20190930185306887.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p><h4 id="2-代码分析-2"><a href="#2-代码分析-2" class="headerlink" title="2.代码分析"></a>2.代码分析</h4><p>位置：dapur\apps\app_config\controller\backuper.php<br><img src="https://img-blog.csdnimg.cn/20191109182003922.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>从第16行代码可以看到，当判断备份类型为database后直接通过unlink函数对文件进行删除，并且文件位置只是通过POST方法传值没有经过任何处理就和<code>../../../../.backup/</code>进行拼接，造成任意文件删除漏洞。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;0x00-前言&quot;&gt;&lt;a href=&quot;#0x00-前言&quot; class=&quot;headerlink&quot; title=&quot;0x00 前言&quot;&gt;&lt;/a&gt;0x00 前言&lt;/h3&gt;&lt;p&gt;以下为fiyocms2.0.6.1版本的一些漏洞复现过程及代码分析。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞分析复现" scheme="http://yoursite.com/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="漏洞分析复现" scheme="http://yoursite.com/tags/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%A4%8D%E7%8E%B0/"/>
+    
+  </entry>
+  
+</feed>
