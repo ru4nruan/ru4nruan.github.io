@@ -4,8 +4,7 @@
   <meta charset="utf-8">
   
   
-  <meta name="description" content="0x00 前言0x01 任意文件上传1.漏洞复现漏洞位置：Dashboard》Themes》default》Files点击Simpan时抓包，将src参数和content参数修改为新建文件名和其内容嗯哼~~
-2.代码分析位置：\fiyocms/dapur/apps/app_theme/libs/sa">
+  <meta name="description" content="你是这白开水一样淡的日子里偷偷加的一颗糖~~">
   
 
   
@@ -16,12 +15,12 @@
   
   <title>fiyocms2.0.6.1版本漏洞复现及分析 | ruanruan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 前言0x01 任意文件上传1.漏洞复现漏洞位置：Dashboard》Themes》default》Files点击Simpan时抓包，将src参数和content参数修改为新建文件名和其内容嗯哼~~ 2.代码分析位置：\fiyocms/dapur/apps/app_theme/libs/save_file.php从27行代码可以看到利用file_get_contents()函数将c参数的内">
+  <meta name="description" content="0x00 前言以下为fiyocms2.0.6.1版本的一些漏洞复现过程及代码分析。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="fiyocms2.0.6.1版本漏洞复现及分析">
 <meta property="og:url" content="http://yoursite.com/2019/12/23/fiyocms2-0-6-1版本漏洞复现及分析/index.html">
 <meta property="og:site_name" content="ruanruan">
-<meta property="og:description" content="0x00 前言0x01 任意文件上传1.漏洞复现漏洞位置：Dashboard》Themes》default》Files点击Simpan时抓包，将src参数和content参数修改为新建文件名和其内容嗯哼~~ 2.代码分析位置：\fiyocms/dapur/apps/app_theme/libs/save_file.php从27行代码可以看到利用file_get_contents()函数将c参数的内">
+<meta property="og:description" content="0x00 前言以下为fiyocms2.0.6.1版本的一些漏洞复现过程及代码分析。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190930181527589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190930181244659.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70">
@@ -34,10 +33,10 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190930185322891.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190930185306887.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20191109182003922.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2019-12-23T02:08:27.403Z">
+<meta property="og:updated_time" content="2019-12-23T02:29:56.488Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fiyocms2.0.6.1版本漏洞复现及分析">
-<meta name="twitter:description" content="0x00 前言0x01 任意文件上传1.漏洞复现漏洞位置：Dashboard》Themes》default》Files点击Simpan时抓包，将src参数和content参数修改为新建文件名和其内容嗯哼~~ 2.代码分析位置：\fiyocms/dapur/apps/app_theme/libs/save_file.php从27行代码可以看到利用file_get_contents()函数将c参数的内">
+<meta name="twitter:description" content="0x00 前言以下为fiyocms2.0.6.1版本的一些漏洞复现过程及代码分析。">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190930181527589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70">
   
   
@@ -96,13 +95,15 @@
         
         <div class="comments-link">
             
-            <a href="javascript:void(0);" data-url="http://yoursite.com/2019/12/23/fiyocms2-0-6-1版本漏洞复现及分析/" data-id="ck4ht21070001h0vsofblbo0r" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2019/12/23/fiyocms2-0-6-1版本漏洞复现及分析/" data-id="ck4hv0xcb0001twvsrjs4xytg" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
         </div><!-- .comments-link -->
       </header><!-- .entry-header -->
 
     <div class="entry-content">
       
-        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><h3 id="0x01-任意文件上传"><a href="#0x01-任意文件上传" class="headerlink" title="0x01 任意文件上传"></a>0x01 任意文件上传</h3><h4 id="1-漏洞复现"><a href="#1-漏洞复现" class="headerlink" title="1.漏洞复现"></a>1.漏洞复现</h4><p>漏洞位置：Dashboard》Themes》default》Files<br><img src="https://img-blog.csdnimg.cn/20190930181527589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>点击Simpan时抓包，将src参数和content参数修改为新建文件名和其内容<br><img src="https://img-blog.csdnimg.cn/20190930181244659.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>嗯哼~~<br><img src="https://img-blog.csdnimg.cn/20190930182443894.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>以下为fiyocms2.0.6.1版本的一些漏洞复现过程及代码分析。</p>
+<a id="more"></a>
+<h3 id="0x01-任意文件上传"><a href="#0x01-任意文件上传" class="headerlink" title="0x01 任意文件上传"></a>0x01 任意文件上传</h3><h4 id="1-漏洞复现"><a href="#1-漏洞复现" class="headerlink" title="1.漏洞复现"></a>1.漏洞复现</h4><p>漏洞位置：Dashboard》Themes》default》Files<br><img src="https://img-blog.csdnimg.cn/20190930181527589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>点击Simpan时抓包，将src参数和content参数修改为新建文件名和其内容<br><img src="https://img-blog.csdnimg.cn/20190930181244659.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>嗯哼~~<br><img src="https://img-blog.csdnimg.cn/20190930182443894.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h4 id="2-代码分析"><a href="#2-代码分析" class="headerlink" title="2.代码分析"></a>2.代码分析</h4><p>位置：\fiyocms/dapur/apps/app_theme/libs/save_file.php<br><img src="https://img-blog.csdnimg.cn/20191109181413802.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>从27行代码可以看到利用<code>file_get_contents()</code>函数将<code>c</code>参数的内容保存到<code>f</code>参数的文件上，但是没有对f和c进行任何处理，直接通过POST方法传值，从而造成任意文件上传漏洞。</p>
 <h3 id="0x02-任意文件读取"><a href="#0x02-任意文件读取" class="headerlink" title="0x02 任意文件读取"></a>0x02 任意文件读取</h3><h4 id="1-漏洞复现-1"><a href="#1-漏洞复现-1" class="headerlink" title="1.漏洞复现"></a>1.漏洞复现</h4><p>漏洞位置：admin》Themes》default》Files<br>点击index.php时抓包<br><img src="https://img-blog.csdnimg.cn/20190930183833820.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>修改参数，读取成功<br><img src="https://img-blog.csdnimg.cn/20190930183804869.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h4 id="2-代码分析-1"><a href="#2-代码分析-1" class="headerlink" title="2.代码分析"></a>2.代码分析</h4><p>位置：/dapur/apps/app_theme/libs/check_file.php<br><img src="https://img-blog.csdnimg.cn/20191109182627103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N5eTAyMDE=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>从第13、14行代码可以看出，通过<code>get</code>方法得到文件路径和文件名后进行拼接直接赋值给<code>$file</code>,再赋值给<code>$furl</code>，然后没有经过任何处理直接在23行通过file_get_contents()方法读取<code>$furl</code>，因此存在任意文件读取漏洞。</p>
@@ -128,8 +129,8 @@
 <nav class="nav-single">
     <h3 class="assistive-text">文章导航</h3>
     
+        <span class="nav-previous"><a href="/2019/12/23/ThinkCMF框架任意内容包含漏洞分析复现/" rel="prev"><span class="meta-nav">←</span> ThinkCMF框架任意内容包含漏洞分析复现</a></span>
     
-        <span class="nav-next"><a href="/2019/12/23/fiyocms 2061版本漏洞复现分析/" rel="next">(no title) <span class="meta-nav">→</span></a></span>
     
 </nav><!-- .nav-single -->
 
@@ -152,6 +153,13 @@
     
   
     
+  <aside class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-content">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/漏洞分析复现/">漏洞分析复现</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </aside>
+
   
     
   <aside class="widget">
@@ -160,11 +168,11 @@
       <ul>
         
           <li>
-            <a href="/2019/12/23/fiyocms2-0-6-1版本漏洞复现及分析/">fiyocms2.0.6.1版本漏洞复现及分析</a>
+            <a href="/2019/12/23/ThinkCMF框架任意内容包含漏洞分析复现/">ThinkCMF框架任意内容包含漏洞分析复现</a>
           </li>
         
           <li>
-            <a href="/2019/12/23/fiyocms 2061版本漏洞复现分析/">(no title)</a>
+            <a href="/2019/12/23/fiyocms2-0-6-1版本漏洞复现及分析/">fiyocms2.0.6.1版本漏洞复现及分析</a>
           </li>
         
       </ul>
@@ -173,13 +181,27 @@
 
   
     
+  <aside class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-content">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/漏洞分析复现/">漏洞分析复现</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </aside>
+
   
     
+  <aside class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-content tagcloud">
+      <a href="/tags/漏洞分析复现/" style="font-size: 10px;">漏洞分析复现</a>
+    </div>
+  </aside>
+
   
 </div>
       </div>
       <footer id="colophon" role="contentinfo">
-    <p>&copy; 2019 John Doe
+    <p>&copy; 2019 ruanruan
     All rights reserved.</p>
     <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
 </footer>
